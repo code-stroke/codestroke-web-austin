@@ -19,6 +19,6 @@ if (OneSignal.installServiceWorker) {
   OneSignal.installServiceWorker();
 } else {
   if (navigator.serviceWorker) {
-    navigator.serviceWorker.register('/OneSignalSDKWorker.js?appId=a704a88e-9e37-41f6-99b8-6ded41926c03');
+    navigator.serviceWorker.register('../../OneSignalSDKWorker.js?appId=a704a88e-9e37-41f6-99b8-6ded41926c03');
   }
 }
