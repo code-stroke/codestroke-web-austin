@@ -274,6 +274,24 @@ const API = {
                     break;
             }
         },
+        getStatusString: function(string) {
+            if (!string) {
+                return "Unknown";
+            }
+
+            function pad(number) {
+                if (number < 10) {
+                    return '0' + number;
+                }
+                return number;
+            }
+
+            let date = new Date(string);
+
+            return date.toLocaleTimeString([],{hour: '2-digit', minute:'2-digit'}) + " ("
+                    + pad(date.getDate()) + "/"
+                    + pad(date.getMonth() + 1) + ")";
+        },
         convertDate: function(date) {
             function pad(number) {
                 if (number < 10) {

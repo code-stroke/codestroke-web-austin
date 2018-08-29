@@ -168,11 +168,14 @@ const Cases = {
             row.case_id = dlist[i].case_id;
             row.name = dlist[i].name;
             row.age_gender = API.data.getAgeGender(dlist[i]);
-            row.time = API.data.getStatusTime(dlist[i]);
+            // Disabled for now: Displaying actual timestamp instead
+            //row.time = API.data.getStatusTime(dlist[i]);
 
 
             switch (dlist[i].status) {
                 case "incoming":
+                    // Display absolute
+                    row.time = API.data.getStatusString(dlist[i].eta);
                     if (dlist[i].eta) {
                         row.order_time = dlist[i].eta;
                     } else {
@@ -181,10 +184,13 @@ const Cases = {
                     rows_incoming.push(row);
                     break;
                 case "active":
+                    row.time = API.data.getStatusString(dlist[i].active_timestamp);
                     row.order_time = dlist[i].active_timestamp;
                     rows_active.push(row);
                     break;
                 case "completed":
+                    row.time = API.data.getStatusString(dlist[i].completed_timestamp);
+
                     // Only display cases that were completed < 24h ago
                     // TODO: This is a bit of a dirty workaround - more of API should be exposed
                     let millis = new Date().getTime() - new Date(dlist[i].completed_timestamp).getTime();
