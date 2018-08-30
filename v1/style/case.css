@@ -456,6 +456,53 @@
 
 .case-section.ed {
     min-width: 400px;
+
+    position: relative;
+}
+
+.ed_map {
+    position: absolute;
+
+    left: calc(100% + 40px);
+    width: 700px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.ed_map_row {
+    min-height: 40px;
+    max-height: 40px;
+
+    display: flex;
+    align-items: center;
+}
+
+.ed_map_row > div {
+    width: 200px;
+    min-height: 30px
+    max-height: 30px;
+
+    padding: 5px;
+
+
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ed_map_row.patient > div {
+    background: IndianRed;
+}
+
+.ed_map_row.austin > div {
+    background: YellowGreen;
+}
+
+.ed_map_row > span {
+    margin-left: 20px;
 }
 
 .case-row.ed_loc {

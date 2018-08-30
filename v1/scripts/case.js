@@ -31,6 +31,11 @@ const DOM_Case = {
         load: function() {
             DOM_Case.ed.loc = "#js-ed-loc";
             DOM_Case.ed.complete = "ed_complete";
+
+            DOM_Case.ed.map_container = "#js-ed-map";
+            DOM_Case.ed.map_pickup = "#js-ed-pickup";
+            DOM_Case.ed.map_eta = "#js-ed-eta";
+            DOM_Case.ed.map = "#js-ed-canvas";
         }
     },
     history: {
@@ -182,6 +187,8 @@ const Case = {
                 DOM_Case.case.status.text("Completed");
                 break;
         }
+
+        $(document).trigger("case:patient_filled");
     },
     fillPage: function(data) {
         console.log(data);
@@ -272,7 +279,10 @@ const Case = {
 
         });
 
-        $("div[data-section='case_eds']").trigger("click");
+        $(document).one("case:patient_filled", function() {
+            $("div[data-section='case_eds']").trigger("click");
+        });
+
     },
     loadPage: function(button) {
         Case.overlay.hideDialog();
@@ -484,6 +494,36 @@ const Case = {
         }
     }
 };
+
+const ED = {
+    load: function() {
+        $(document).on("case:load_start", function() {
+            if (Case.patient.status == "incoming") {
+                // TODO: Should not need separate AJAX. Key should be returned with Patient Details
+                $.ajax({
+                    url: `${API.address}/cases/`,
+                    method: "GET",
+                    headers: API.login.headers,
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function(result) {
+                        console.log(result.google_distance_api_key);
+
+                        $("#js-ed-pickup").text(API.data.getStatusString(Case.patient.incoming_timestamp));
+                        $(DOM_Case.ed.map_eta).text(API.data.getStatusString(Case.patient.eta));
+                        $(DOM_Case.ed.map).prop("src", `https://maps.googleapis.com/maps/api/staticmap?center=Austin+Hospital,Melbourne,VIC
+                        &zoom=11&size=700x700&maptype=roadmap&scale=1
+                        &markers=color:green%7Clabel:B%7C-37.756200, 145.060289
+                        &markers=color:red%7Clabel:A%7C${Case.patient.initial_location_lat},${Case.patient.initial_location_long}
+                        &key=${result.google_distance_api_key}`)
+
+                        $(DOM_Case.ed.map_container).removeClass("hidden");
+                    }
+                });
+            }
+        });
+    }
+}
 
 const History = {
     load: function() {
@@ -859,6 +899,7 @@ $(document).ready(function() {
     DOM_Case.load();
 
     Case.load();
+    ED.load();
     History.load();
     Assess.load();
     Radiology.load();
