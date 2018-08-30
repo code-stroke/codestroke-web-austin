@@ -507,8 +507,6 @@ const ED = {
                     dataType: "json",
                     crossDomain: true,
                     success: function(result) {
-                        console.log(result.google_distance_api_key);
-
                         $("#js-ed-pickup").text(API.data.getStatusString(Case.patient.incoming_timestamp));
                         $(DOM_Case.ed.map_eta).text(API.data.getStatusString(Case.patient.eta));
                         $(DOM_Case.ed.map).prop("src", `https://maps.googleapis.com/maps/api/staticmap?center=Austin+Hospital,Melbourne,VIC
